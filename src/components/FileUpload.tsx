@@ -1,12 +1,14 @@
 import React from 'react';
 import { X, File, Image } from 'lucide-react';
+import { Theme } from '../types/theme';
 
 interface FileUploadProps {
   files: File[];
   onRemove: (index: number) => void;
+  theme: Theme;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ files, onRemove }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ files, onRemove, theme }) => {
   const getFileIcon = (file: File) => {
     if (file.type.startsWith('image/')) {
       return <Image className="w-4 h-4" />;
@@ -27,24 +29,33 @@ const FileUpload: React.FC<FileUploadProps> = ({ files, onRemove }) => {
       {files.map((file, index) => (
         <div
           key={index}
-          className="flex items-center space-x-2 bg-gray-700 rounded-lg px-3 py-2 text-sm"
+          className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm transition-colors duration-300"
+          style={{ backgroundColor: theme.surfaceColor }}
         >
-          <div className="text-gray-400">
+          <div style={{ color: theme.textSecondaryColor }}>
             {getFileIcon(file)}
           </div>
           
           <div className="flex-1 min-w-0">
-            <div className="text-white truncate max-w-[150px]" title={file.name}>
+            <div 
+              className="truncate max-w-[150px]" 
+              title={file.name}
+              style={{ color: theme.textColor }}
+            >
               {file.name}
             </div>
-            <div className="text-gray-400 text-xs">
+            <div 
+              className="text-xs"
+              style={{ color: theme.textSecondaryColor }}
+            >
               {formatFileSize(file.size)}
             </div>
           </div>
           
           <button
             onClick={() => onRemove(index)}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="transition-colors hover:opacity-80"
+            style={{ color: theme.textSecondaryColor }}
           >
             <X className="w-4 h-4" />
           </button>
